@@ -50,11 +50,10 @@ def plot_data_all_stacked(ticker, prices, dates):
 
 
     fig, ax = plt.subplots(figsize=(13, 7))
-    colors = ['blue', 'orange', 'green', 'red', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
     
     for i in range(0, len(data_dates)):
         if len(data_dates[i]) != 0:
-            ax.plot([i for i in range(len(data_dates[i]))], data_prices[i], '-o', label=str(data_dates)[i][0][0:4], color=colors[i], markersize=1, linewidth=0.25)
+            ax.plot([i for i in range(len(data_dates[i]))], data_prices[i], '-o', label=str(data_dates)[i][0][0:4], color=color_list[i], markersize=1, linewidth=0.25)
     
     ax.set_xlabel('Day X')
     ax.set_ylabel('Share Value closing price ($)')
