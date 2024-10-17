@@ -2,7 +2,7 @@ import requests
 import json
 import matplotlib.pyplot as plt
 
-from analyze import get_price_info
+from analyze import get_info
 from colors import color_list
 from tickers import symbols_available
 from datetime import date
@@ -10,10 +10,10 @@ from simple_term_menu import TerminalMenu
 
 
 
+# OPTION 1
 def plot_data_all(ticker, prices, dates):
 
-    # print(dates[1][0].split('-')[0])
-    # print(dates[-1][0].split('-')[0])
+
 
     data_dates = []
     data_prices = []
@@ -24,6 +24,9 @@ def plot_data_all(ticker, prices, dates):
 
     data_dates.reverse()
     data_prices.reverse()
+
+    get_info(data_dates, data_prices)
+
 
     fig, ax = plt.subplots(figsize=(13, 7))
     
@@ -46,6 +49,7 @@ def plot_data_all(ticker, prices, dates):
 
 
 
+# OPTION 2
 def plot_data_all_stacked(ticker, prices, dates):
 
     data_dates = []
@@ -54,7 +58,11 @@ def plot_data_all_stacked(ticker, prices, dates):
     for (p, d) in zip(prices, dates):
         data_dates.append(list(reversed(d)))
         data_prices.append(list(reversed(p)))
+    
+    data_dates.reverse()
+    data_prices.reverse()
 
+    get_info(data_dates, data_prices)
 
     fig, ax = plt.subplots(figsize=(13, 7))
     
@@ -80,31 +88,8 @@ def plot_data_all_stacked(ticker, prices, dates):
     ax.set_title(f'${ticker}')
     plt.show()
 
-def plot_data_holiday_inverse(ticker, prices, dates):
 
-    data_dates = []
-    data_prices = []
-
-
-    for (p, d) in zip(prices, dates):
-        data_dates.append(list(reversed(d)))
-        data_prices.append(list(reversed(p)))
-
-    fig, ax = plt.subplots(figsize=(13, 7))
-    
-    for i in range(0, len(data_dates)):
-        if len(data_dates[i]) != 0:
-            ax.plot([i for i in range(len(data_dates[i]))], data_prices[i], '-o', label=str(data_dates)[i][0][0:4], color=color_list[i], markersize=1, linewidth=0.25)
-    
-    ax.set_xlabel('Jan 1st   -->   Sept 30')
-    ax.set_ylabel('Share Value closing price ($)')
-    # ax.legend(range(date.today().year, 2014, -1), loc='upper right')
-    # ax.legend(range(int(data_dates[-2][0][0:4]), int(data_dates[0][0][0:4]) - 1, -1), loc='upper right')
-    ax.legend(range(int(data_dates[1][0][0:4]), int(data_dates[-1][0][0:4]) - 1, -1), loc='upper right')
-
-    ax.set_title(f'${ticker}')
-    plt.show()
-
+# OPTION 3
 def plot_data_holiday_szns(ticker, prices, dates):
     # holiday_dates = [
     #     '10-01', '10-02', '10-05', '10-06', '10-07', '10-08', '10-09', '10-12', '10-13', '10-14', '10-15', 
@@ -121,6 +106,12 @@ def plot_data_holiday_szns(ticker, prices, dates):
     for (p, d) in zip(prices, dates):
         data_dates.append(list(reversed(d)))
         data_prices.append(list(reversed(p)))
+    
+    data_dates.reverse()
+    data_prices.reverse()
+    
+    get_info(data_dates, data_prices)
+    
 
     # avg_price_increase(data_prices, data_dates)
 
@@ -135,11 +126,54 @@ def plot_data_holiday_szns(ticker, prices, dates):
     ax.set_ylabel('Share Value closing price ($)')
     # ax.legend(range(date.today().year, 2014, -1), loc='upper right')
     # ax.legend(range(int(data_dates[-2][0][0:4]), int(data_dates[0][0][0:4]) - 1, -1), loc='upper right')
-    ax.legend(range(int(data_dates[1][0][0:4]), int(data_dates[-1][0][0:4]) - 1, -1), loc='upper right')
+    # ax.legend(range(int(data_dates[1][0][0:4]), int(data_dates[-1][0][0:4]) - 1, -1), loc='upper right')
+
+    if data_dates[-1][0]:
+        ax.legend(range(int(data_dates[-1][0][0:4]), int(data_dates[0][0][0:4]) - 1, -1), loc='upper right')
+    else:
+        ax.legend(range(int(data_dates[-2][0][0:4]), int(data_dates[0][0][0:4]) - 1, -1), loc='upper right')
+
 
     ax.set_title(f'${ticker}')
     plt.show()
 
+
+# OPTION 4
+def plot_data_holiday_inverse(ticker, prices, dates):
+
+    data_dates = []
+    data_prices = []
+
+
+    for (p, d) in zip(prices, dates):
+        data_dates.append(list(reversed(d)))
+        data_prices.append(list(reversed(p)))
+    
+    data_dates.reverse()
+    data_prices.reverse()
+
+    get_info(data_dates, data_prices)
+
+    fig, ax = plt.subplots(figsize=(13, 7))
+    
+    for i in range(0, len(data_dates)):
+        if len(data_dates[i]) != 0:
+            ax.plot([i for i in range(len(data_dates[i]))], data_prices[i], '-o', label=data_dates[i][0][0:4], color=color_list[i], markersize=1, linewidth=0.25)
+    
+    ax.set_xlabel('Jan 1st   -->   Sept 30')
+    ax.set_ylabel('Share Value closing price ($)')
+    # ax.legend(range(date.today().year, 2014, -1), loc='upper right')
+    # ax.legend(range(int(data_dates[-2][0][0:4]), int(data_dates[0][0][0:4]) - 1, -1), loc='upper right')
+    # ax.legend(range(int(data_dates[1][0][0:4]), int(data_dates[-1][0][0:4]) - 1, -1), loc='upper right')
+
+    if data_dates[-1][0]:
+        ax.legend(range(int(data_dates[-1][0][0:4]), int(data_dates[0][0][0:4]) - 1, -1), loc='upper right')
+    else:
+        ax.legend(range(int(data_dates[-2][0][0:4]), int(data_dates[0][0][0:4]) - 1, -1), loc='upper right')
+
+
+    ax.set_title(f'${ticker}')
+    plt.show()
 
 
 def parse_local_data(ticker):
