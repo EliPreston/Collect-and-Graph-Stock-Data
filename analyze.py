@@ -37,7 +37,8 @@ def get_price_info(date_data, price_data):
     return (high_dt, high_pr, low_dt, low_pr, avg, pr_sum, pr_points)
 
 
-def get_info(price_data, date_data):
+def get_info(date_data, price_data):
+    print
 
     high_dates = []
     high_prices = []
@@ -45,7 +46,7 @@ def get_info(price_data, date_data):
     low_prices = []
 
 
-    for (dl, pl) in zip(price_data, date_data):
+    for (dl, pl) in zip(date_data, price_data):
         info = get_price_info(dl, pl)
 
         high_dates.append(info[0])
@@ -56,3 +57,41 @@ def get_info(price_data, date_data):
     print(f'Highs: \n{high_dates} \n{high_prices}\n')
     print(f'Lows: \n{low_dates} \n{low_prices}\n')
     
+
+def longest_run_yr(date_data, price_data):
+
+    run_dates = []
+    run_prices = []
+
+    curr_run_start = ['', -1]
+    curr_run_end = ['', -1]
+    prev_price = -1
+    run_len = -1
+    
+
+    for (curr_dt, curr_pr) in zip(date_data, price_data):
+
+        if run_len == -1:
+            curr_run_start[0] = curr_dt
+            curr_run_start[1] = curr_pr
+            
+            curr_run_end[0] = curr_dt
+            curr_run_end[1] = curr_pr
+
+
+        if run_len >= 0 and curr_pr > prev_price:
+            curr_run_end[0] = curr_dt
+            curr_run_end[1] = curr_pr
+            run_len += 1
+        
+        if curr_pr < prev_price:
+            run_len = 0
+
+
+    return 0
+
+
+def longest_run_increasing(date_data, price_data):
+
+    for (dl, pl) in zip(date_data, price_data):
+        info = longest_run_yr(dl, pl)
